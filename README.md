@@ -90,4 +90,4 @@ Este widget envía un objeto JSON con la siguiente estructura:
 
 Si tienes ideas para nuevas animaciones o funcionalidades, ¡sentite libre de abrir un PR!  
 
-**hecho con 💙 por [Leonardo](https://github.com/LeonardoVaquel) Leonardo**
+**hecho con 💙 por [Leonardo](https://github.com/LeonardoVaquel)**
