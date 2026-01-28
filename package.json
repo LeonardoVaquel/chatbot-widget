@@ -1,6 +1,6 @@
 {
   "name": "@leonardovaq/chatbot-widget",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Native and Customizable Web Component Chat Widget for n8n or any API REST",
   "main": "dist/chatbot.umd.js",
   "module": "dist/chatbot.es.js",
