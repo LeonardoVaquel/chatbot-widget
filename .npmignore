@@ -1,0 +1,10 @@
+# Ignorar código fuente y configuraciones
+src/
+node_modules/
+vite.config.js
+.gitignore
+package-lock.json
+
+# Ignorar logs y archivos de sistema
+npm-debug.log
+.DS_Store
