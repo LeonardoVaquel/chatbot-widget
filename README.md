@@ -58,12 +58,15 @@ chat-bot {
   --primary-color: #f7d621;
   --text-color: #2b2a2a;
   --bg-window: #f4f4f4;
+  --text-window: #2b2a2a;
 
   /* Mensajes dentro de la ventana del chat */
   --bg-bot-msg-color: #f7d621;
   --text-bot-color: #2b2a2a;
   --bg-user-color: #f8eca8;
   --text-user-color: #2b2a2a;
+  --bg-input-color: #f8f8f8;
+  --text-input-color: #2b2a2a;
 
   /* Botón Flotante */
   --float-btn-content: "💬";
