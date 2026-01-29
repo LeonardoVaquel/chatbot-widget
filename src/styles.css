@@ -2,6 +2,7 @@
   --primary-color: #f7d621;
   --text-color: #2b2a2a;
   --bg-window: #f4f4f4;
+  --text-window: #2b2a2a;
   --bg-bot-msg-color: #f7d621;
   --text-bot-color: #2b2a2a;
   --bg-user-color: #f8eca8;
@@ -10,12 +11,20 @@
   --float-btn-close-content: "✕";
   --float-btn-content-size: 18px;
   --unread-indicator-color: #ff4444;
+  --bg-input-color: #f8f8f8;
+  --text-input-color: #2b2a2a;
   --chat-font-family: system-ui, -apple-system, sans-serif;
   font-family: var(--chat-font-family);
+  position: fixed;
+  z-index: 99;
 }
 
 input, button, .win {
   font-family: var(--chat-font-family);
+}
+
+#writting {
+  color: var(--text-window);
 }
 
 .win {
@@ -151,6 +160,8 @@ input {
   border: 1px solid;
   border-color:rgb(173, 173, 173);
   border-radius: 20px;
+  background-color: var(--bg-input-color);
+  color: var(--text-input-color);
 }
 
 .chat_header {

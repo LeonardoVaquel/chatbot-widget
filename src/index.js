@@ -82,13 +82,13 @@ class Chatbot extends HTMLElement {
       <div class="win" id="window">
         <div class="chat_header">${this.getAttribute('bot-name') || 'Chat'}</div>
         <div class="response" id="message" style="flex:1;overflow:auto;padding:20px"></div>
-        <span id="writting" hidden class="writting">${this.getAttribute('bot-name')} está escribiendo...</span>
-        <div style="display:flex;padding:10px;border-top:1px solid rgb(179, 179, 179);gap: 8px; margin-top: 8px">
-          <input placeholder="${this.getAttribute('input-placeholder') || 'Escribe aquí...'}">
-          <button id="submit-btn" class="btn">Enviar</button>
+        <span id="writting" hidden class="writting">${this.getAttribute('bot-name') || 'Chatbot'} está escribiendo...</span>
+        <div tabindex="0" style="display:flex;padding:10px;border-top:1px solid rgb(179, 179, 179);gap: 8px; margin-top: 8px">
+          <input tabindex="1" id="user-input" autofocus placeholder="${this.getAttribute('input-placeholder') || 'Escribe aquí...'}">
+          <button tabindex="2" id="submit-btn" class="btn">Enviar</button>
         </div>
       </div>
-      <button id="float-btn" class="float-btn"></button>
+      <button tabindex="0" id="float-btn" class="float-btn"></button>
     `;
 
     this.shadowRoot.getElementById('float-btn').onclick = () => this.toggleChat();
