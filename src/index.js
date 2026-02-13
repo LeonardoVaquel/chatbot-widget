@@ -1,4 +1,6 @@
 import stylesText from './styles.css?inline';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 class Chatbot extends HTMLElement {
   constructor() {
@@ -33,6 +35,10 @@ class Chatbot extends HTMLElement {
       this.setAttribute('open', '');
       const btn = this.shadowRoot.getElementById('float-btn');
       btn.classList.remove('unread');
+        setTimeout(() => {
+        const input = this.shadowRoot.getElementById('user-input');
+        if (input) input.focus();
+      }, 100);
     }
   }
 
@@ -50,7 +56,12 @@ class Chatbot extends HTMLElement {
     bodyObj[inputKey] = userVal;
   
     const waitResponse = this.shadowRoot.getElementById('writting');
-    waitResponse.removeAttribute('hidden');
+    const messageDiv = this.shadowRoot.getElementById('message');
+    
+    const typingTimeout = setTimeout(() => {
+      waitResponse.removeAttribute('hidden');
+      this.scrollToBottom();
+    }, 800);
 
     try {
       const res = await fetch(this.getAttribute('url'), {
@@ -72,8 +83,14 @@ class Chatbot extends HTMLElement {
     } catch (e) {
       this.add(this.getAttribute('service-off-msg') || 'Lo siento, en este momento no estoy disponible', 'bot');
     } finally {
+      clearTimeout(typingTimeout);
       waitResponse.setAttribute('hidden', "");
     }
+  }
+
+  scrollToBottom() {
+    const messageDiv = this.shadowRoot.getElementById('message');
+    messageDiv.scrollTop = messageDiv.scrollHeight;
   }
 
   render() {
@@ -81,8 +98,9 @@ class Chatbot extends HTMLElement {
       <style>${stylesText}</style>
       <div class="win" id="window">
         <div class="chat_header">${this.getAttribute('bot-name') || 'Chat'}</div>
-        <div class="response" id="message" style="flex:1;overflow:auto;padding:20px"></div>
-        <span id="writting" hidden class="writting">${this.getAttribute('bot-name') || 'Chatbot'} está escribiendo...</span>
+        <div class="response" id="message" style="flex:1;overflow:auto;padding:20px">
+          <span id="writting" hidden class="writting">${this.getAttribute('bot-name') || 'Chatbot'} está escribiendo...</span>
+        </div>
         <div tabindex="0" style="display:flex;padding:10px;border-top:1px solid rgb(179, 179, 179);gap: 8px; margin-top: 8px">
           <input tabindex="1" id="user-input" autofocus placeholder="${this.getAttribute('input-placeholder') || 'Escribe aquí...'}">
           <button tabindex="2" id="submit-btn" class="btn">Enviar</button>
@@ -91,22 +109,74 @@ class Chatbot extends HTMLElement {
       <button tabindex="0" id="float-btn" class="float-btn"></button>
     `;
 
-    this.shadowRoot.getElementById('float-btn').onclick = () => this.toggleChat();
+    this.shadowRoot.getElementById('float-btn').onclick = (e) => {
+      e.stopPropagation();
+      this.toggleChat();
+    };
     
     this.shadowRoot.getElementById('submit-btn').onclick = () => this.send();
 
     this.shadowRoot.querySelector('input').onkeypress = (e) => {
       if (e.key === 'Enter') this.send();
     };
+
+    if (this.hasAttribute('open')) {
+      setTimeout(() => {
+        const input = this.shadowRoot.getElementById('user-input');
+        if (input) input.focus();
+      }, 100);
+    }
+
+    const messageDiv = this.shadowRoot.getElementById('message');
+    messageDiv.addEventListener('wheel', (e) => {
+      const isScrollingUp = e.deltaY < 0;
+      const isScrollingDown = e.deltaY > 0;
+      const isAtTop = messageDiv.scrollTop === 0;
+      const isAtBottom = messageDiv.scrollTop + messageDiv.clientHeight >= messageDiv.scrollHeight;
+      
+      if ((isScrollingUp && !isAtTop) || (isScrollingDown && !isAtBottom)) {
+        e.stopPropagation();
+      }
+    }, { passive: false });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.hasAttribute('open')) {
+        this.toggleChat();
+      }
+    });
+
+    const handleOutsideClick = (e) => {
+      if (!this.hasAttribute('open')) return;
+      
+      const win = this.shadowRoot.getElementById('window');
+      const floatBtn = this.shadowRoot.getElementById('float-btn');
+      const path = e.composedPath();
+      const clickedInside = path.some(el => el === win || el === floatBtn);
+      
+      if (!clickedInside) {
+        this.toggleChat();
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+    document.addEventListener('touchstart', handleOutsideClick);
   }
 
   add(text, type) {
     const messageDiv = this.shadowRoot.getElementById('message');
+    const waitResponse = this.shadowRoot.getElementById('writting');
     const msgDiv = document.createElement('div');
-    msgDiv.textContent = text;
+    
+    if (type === 'bot') {
+      const html = marked.parse(text);
+      msgDiv.innerHTML = DOMPurify.sanitize(html);
+    } else {
+      msgDiv.textContent = text;
+    }
+    
     msgDiv.classList.add(type === 'user' ? 'usermessage' : 'botmessage');
-    messageDiv.appendChild(msgDiv);
-    messageDiv.scrollTop = messageDiv.scrollHeight;
+    messageDiv.insertBefore(msgDiv, waitResponse);
+    this.scrollToBottom();
   }
 }
 

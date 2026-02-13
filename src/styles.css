@@ -187,6 +187,10 @@ input {
   padding: 12px 14px 12px 14px;
   margin: 8px 0px 8px 0px;
   justify-self: end;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .botmessage {
@@ -199,13 +203,27 @@ input {
   border-radius: 18px;
   background-color:var(--bg-bot-msg-color);
   color: var(--text-bot-color);
-  justify-self: start
+  justify-self: start;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .writting {
   font-size: 12px;
   font-weight: 200;
-  padding: 8px 12px 8px 12px;
+  padding: 8px 12px;
+  display: block;
+  margin-top: 4px;
+  color: var(--text-window);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.writting[hidden] {
+  opacity: 0;
+  display: none;
 }
 
 @keyframes pulse {
@@ -221,4 +239,77 @@ input {
     transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
   }
+}
+
+/* Markdown styles */
+.botmessage h1,
+.botmessage h2,
+.botmessage h3,
+.botmessage h4 {
+  margin: 8px 0 8px 0;
+  font-weight: bold;
+}
+
+.botmessage h1 { font-size: 1.3em; }
+.botmessage h2 { font-size: 1.2em; }
+.botmessage h3 { font-size: 1.1em; }
+.botmessage h4 { font-size: 1em; }
+
+.botmessage p {
+  margin: 8px 0;
+}
+
+.botmessage ul,
+.botmessage ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.botmessage li {
+  margin: 4px 0;
+}
+
+.botmessage a {
+  color: var(--text-bot-color);
+  text-decoration: underline;
+}
+
+.botmessage a:hover {
+  opacity: 0.8;
+}
+
+.botmessage code {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.botmessage pre {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+.botmessage pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.botmessage blockquote {
+  border-left: 3px solid var(--text-bot-color);
+  padding-left: 12px;
+  margin: 8px 0;
+  opacity: 0.8;
+}
+
+.botmessage strong {
+  font-weight: bold;
+}
+
+.botmessage em {
+  font-style: italic;
 }
