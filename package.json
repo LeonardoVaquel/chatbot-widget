@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "vite build",
-    "preversion": "npm run build && git add dist/",
+    "preversion": "npm run build && git add dist/ -f",
     "postversion": "git push && git push --tags && npm publish",
     "preview": "vite preview",
     "dev": "npx vite"
